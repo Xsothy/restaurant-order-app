@@ -1,5 +1,5 @@
 import { Effect, HashMap, Ref } from "effect"
-import { Todo, TodoId, TodoNotFound } from "./Todo/Api.js"
+import { Todo, TodoId, TodoNotFound } from "./Api.js"
 
 export class TodosRepository extends Effect.Service<TodosRepository>()("api/TodosRepository", {
     effect: Effect.gen(function*() {

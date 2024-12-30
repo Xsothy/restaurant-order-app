@@ -46,8 +46,8 @@
       "@template/server": ["./packages/server/src/index.js"],
       "@template/server/*": ["./packages/server/src/*.js"],
       "@template/server/test/*": ["./packages/server/test/*.js"],
-      "@template/mobile": ["./packages/mobile/src/index.ts"],
-      "@template/mobile/*": ["./packages/mobile/src/*.ts"]
+      "@template/mobile": ["./packages/mobile/index.js"],
+      "@template/mobile/*": ["./packages/mobile/*.js"]
     }
   }
 }

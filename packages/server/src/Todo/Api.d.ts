@@ -1,0 +1,124 @@
+import type { HttpApiEndpoint, HttpApiGroup } from "@effect/platform"
+import type { Schema } from "effect"
+
+export declare const TodoId: Schema.brand<typeof Schema.Number, "TodoId">
+export type TodoId = typeof TodoId.Type
+export declare const TodoIdFromString: Schema.SchemaClass<
+    number & import("effect/Brand").Brand<"TodoId">,
+    string,
+    never
+>
+declare const Todo_base: Schema.Class<
+    Todo,
+    {
+        id: Schema.brand<typeof Schema.Number, "TodoId">
+        text: typeof Schema.NonEmptyTrimmedString
+        done: typeof Schema.Boolean
+    },
+    Schema.Struct.Encoded<{
+        id: Schema.brand<typeof Schema.Number, "TodoId">
+        text: typeof Schema.NonEmptyTrimmedString
+        done: typeof Schema.Boolean
+    }>,
+    never,
+    {
+        readonly id: number & import("effect/Brand").Brand<"TodoId">
+    } & {
+        readonly text: string
+    } & {
+        readonly done: boolean
+    },
+    {},
+    {}
+>
+export declare class Todo extends Todo_base {
+}
+declare const TodoNotFound_base: Schema.TaggedErrorClass<
+    TodoNotFound,
+    "TodoNotFound",
+    {
+        readonly _tag: Schema.tag<"TodoNotFound">
+    } & {
+        id: typeof Schema.Number
+    }
+>
+export declare class TodoNotFound extends TodoNotFound_base {
+}
+declare const TodosApi_base: HttpApiGroup.HttpApiGroup<
+    "todos",
+    | HttpApiEndpoint.HttpApiEndpoint<
+        "getAllTodos",
+        "GET",
+        never,
+        never,
+        never,
+        never,
+        ReadonlyArray<Todo>,
+        never,
+        never,
+        never
+    >
+    | HttpApiEndpoint.HttpApiEndpoint<
+        "getTodoById",
+        "GET",
+        {
+            readonly id: number
+        },
+        never,
+        never,
+        never,
+        Todo,
+        TodoNotFound,
+        never,
+        never
+    >
+    | HttpApiEndpoint.HttpApiEndpoint<
+        "createTodo",
+        "POST",
+        never,
+        never,
+        {
+            readonly text: string
+        },
+        never,
+        Todo,
+        never,
+        never,
+        never
+    >
+    | HttpApiEndpoint.HttpApiEndpoint<
+        "completeTodo",
+        "PATCH",
+        {
+            readonly id: number
+        },
+        never,
+        never,
+        never,
+        Todo,
+        TodoNotFound,
+        never,
+        never
+    >
+    | HttpApiEndpoint.HttpApiEndpoint<
+        "removeTodo",
+        "DELETE",
+        {
+            readonly id: number
+        },
+        never,
+        never,
+        never,
+        void,
+        TodoNotFound,
+        never,
+        never
+    >,
+    never,
+    never,
+    false
+>
+export declare class TodosApi extends TodosApi_base {
+}
+export {}
+// # sourceMappingURL=Api.d.ts.map

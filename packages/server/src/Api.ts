@@ -1,19 +1,9 @@
-import { HttpApiBuilder } from "@effect/platform"
-import { TodosApi } from "@template/domain/TodosApi"
-import { Effect, Layer } from "effect"
-import { TodosRepository } from "./TodosRepository.js"
+import { HttpApi, OpenApi } from "@effect/platform"
+import { AccountsApi } from "./Accounts/Api.js"
+import { TodosApi } from "./Todo/Api.js"
 
-const TodosApiLive = HttpApiBuilder.group(TodosApi, "todos", (handlers) =>
-  Effect.gen(function*() {
-    const todos = yield* TodosRepository
-    return handlers
-      .handle("getAllTodos", () => todos.getAll)
-      .handle("getTodoById", ({ path: { id } }) => todos.getById(id))
-      .handle("createTodo", ({ payload: { text } }) => todos.create(text))
-      .handle("completeTodo", ({ path: { id } }) => todos.complete(id))
-      .handle("removeTodo", ({ path: { id } }) => todos.remove(id))
-  }))
-
-export const ApiLive = HttpApiBuilder.api(TodosApi).pipe(
-  Layer.provide(TodosApiLive)
-)
+export class Api extends HttpApi.make("Api")
+    .add(AccountsApi)
+    .add(TodosApi)
+    .annotate(OpenApi.Title, "Groups API")
+{}
