@@ -11,7 +11,10 @@ const ClientLive = SqliteClient.layer({
 
 const MigratorLive = SqliteMigrator.layer({
     loader: SqliteMigrator.fromFileSystem(
-        fileURLToPath(new URL("./migrations", import.meta.url))
+        (() => {
+            console.log(fileURLToPath(new URL("./migrations", import.meta.url)))
+            return fileURLToPath(new URL("./migrations", import.meta.url))
+        })()
     )
 }).pipe(Layer.provide(NodeContext.layer))
 

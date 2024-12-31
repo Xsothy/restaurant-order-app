@@ -37,6 +37,7 @@
     "removeComments": false,
     "plugins": [{ "name": "@effect/language-service" }],
     "paths": {
+      "@packages/*": ["./packages/*.js"],
       "@template/cli": ["./packages/cli/src/index.js"],
       "@template/cli/*": ["./packages/cli/src/*.js"],
       "@template/cli/test/*": ["./packages/cli/test/*.js"],

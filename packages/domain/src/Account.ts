@@ -4,6 +4,7 @@ import { Schema } from "effect"
 export const AccountId = Schema.Number.pipe(Schema.brand("AccountId"))
 export type AccountId = typeof AccountId.Type
 
+// @ts-ignore
 export class Account extends Model.Class<Account>("Account")({
     id: Model.Generated(AccountId),
     createdAt: Model.DateTimeInsert,

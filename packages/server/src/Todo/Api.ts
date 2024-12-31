@@ -1,4 +1,4 @@
-import { HttpApiEndpoint, HttpApiGroup } from "@effect/platform"
+import { HttpApi, HttpApiEndpoint, HttpApiGroup } from "@effect/platform"
 import { Schema } from "effect"
 
 export const TodoId = Schema.Number.pipe(Schema.brand("TodoId"))
@@ -18,7 +18,7 @@ export class TodoNotFound extends Schema.TaggedError<TodoNotFound>()("TodoNotFou
     id: Schema.Number
 }) {}
 
-export class TodosApi extends HttpApiGroup
+export class TodosApiGroup extends HttpApiGroup
     .make("todos")
     .add(HttpApiEndpoint.get("getAllTodos", "/todos").addSuccess(Schema.Array(Todo)))
     .add(
@@ -45,3 +45,5 @@ export class TodosApi extends HttpApiGroup
             .setPath(Schema.Struct({ id: Schema.NumberFromString }))
     )
 {}
+
+export class TodosApi extends HttpApi.make("todos").add(TodosApiGroup) {}

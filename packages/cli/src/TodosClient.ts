@@ -1,13 +1,16 @@
 import { HttpApiClient } from "@effect/platform"
-import { TodosApi } from "@template/server/Todo/Api"
+import { Api } from "@template/server/Api"
 import { Effect } from "effect"
 
 export class TodosClient extends Effect.Service<TodosClient>()("cli/TodosClient", {
     accessors: true,
     effect: Effect.gen(function*() {
-        const client = yield* HttpApiClient.make(TodosApi, {
-            baseUrl: "http://localhost:3000"
-        })
+        const client = yield* HttpApiClient.make(
+            Api,
+            {
+                baseUrl: "http://localhost:3000"
+            }
+        )
 
         function create(text: string) {
             return client.todos.createTodo({ payload: { text } }).pipe(
@@ -40,4 +43,5 @@ export class TodosClient extends Effect.Service<TodosClient>()("cli/TodosClient"
             remove
         } as const
     })
-}) {}
+}) {
+}

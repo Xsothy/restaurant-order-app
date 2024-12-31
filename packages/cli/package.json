@@ -27,14 +27,14 @@
     "@effect/cli": "latest",
     "@effect/platform": "latest",
     "@effect/platform-node": "latest",
-    "@template/domain": "workspace:^",
+    "@template/server": "workspace:^",
     "effect": "latest"
   },
   "devDependencies": {
     "@effect/cli": "latest",
     "@effect/platform": "latest",
     "@effect/platform-node": "latest",
-    "@template/domain": "workspace:^",
+    "@template/server": "workspace:^",
     "effect": "latest"
   },
   "effect": {
