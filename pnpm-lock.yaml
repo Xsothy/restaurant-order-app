@@ -49,18 +49,9 @@ importers:
       '@eslint/js':
         specifier: 9.13.0
         version: 9.13.0
-      '@types/jest':
-        specifier: ^29.5.12
-        version: 29.5.14
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.2
-      '@types/react':
-        specifier: ~18.3.12
-        version: 18.3.18
-      '@types/react-test-renderer':
-        specifier: ^18.3.0
-        version: 18.3.1
       '@types/uuid':
         specifier: ^10.0.0
         version: 10.0.0
@@ -97,15 +88,6 @@ importers:
       glob:
         specifier: ^11.0.0
         version: 11.0.0
-      jest:
-        specifier: ^29.2.1
-        version: 29.7.0(@types/node@22.10.2)
-      jest-expo:
-        specifier: ~52.0.2
-        version: 52.0.2(@babel/core@7.26.0)(expo@52.0.23(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@expo/metro-runtime@4.0.0(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.18)(react@18.3.1)))(react-native-webview@13.12.5(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(jest@29.7.0(@types/node@22.10.2))(react-dom@18.3.1(react@18.3.1))(react-native@0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)(webpack@5.97.1)
-      react-test-renderer:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
       tsx:
         specifier: ^4.19.2
         version: 4.19.2
