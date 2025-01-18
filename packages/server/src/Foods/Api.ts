@@ -1,8 +1,8 @@
 import { HttpApiEndpoint, HttpApiGroup, OpenApi } from "@effect/platform"
 import { Food, FoodAlreadyExists, FoodIdFromString, FoodNotFound, FoodWithSensitive } from "@template/domain/Food"
 import { Schema } from "effect"
-import { Authentication } from "../Accounts/Api.js"
 import { CategoryIdFromString, CategoryNotFound } from "../../../domain/src/Category.js"
+import { Authentication } from "../Accounts/Api.js"
 
 export class FoodsApiGroup extends HttpApiGroup.make("foods")
     .add(
@@ -39,7 +39,8 @@ export class FoodsApiGroup extends HttpApiGroup.make("foods")
                     Food.jsonUpdate,
                     Schema.Struct({ categoryId: CategoryIdFromString })
                 )
-            ))
+            )
+    )
     .add(
         HttpApiEndpoint.del("removeFood", "/foods/:id")
             .addSuccess(Schema.Void)
@@ -49,4 +50,4 @@ export class FoodsApiGroup extends HttpApiGroup.make("foods")
     .middlewareEndpoints(Authentication)
     .annotate(OpenApi.Title, "Foods")
     .annotate(OpenApi.Description, "Manage food categories")
-{ }
+{}

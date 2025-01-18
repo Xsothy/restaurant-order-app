@@ -25,15 +25,14 @@ export class FoodWithSensitive extends Model.Class<FoodWithSensitive>(
 )({
     ...Model.fields(Food),
     category: Category
-}) { }
-
+}) {}
 
 export class FoodNotFound extends Schema.TaggedError<FoodNotFound>()(
     "FoodNotFound",
     { id: FoodId }
-) { }
+) {}
 
 export class FoodAlreadyExists extends Schema.TaggedError<FoodAlreadyExists>()(
     "FoodAlreadyExists",
     { name: Schema.NonEmptyTrimmedString }
-) { }
+) {}

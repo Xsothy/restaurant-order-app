@@ -1,10 +1,11 @@
-import { Model } from "@effect/sql"
+import { Model, SqlClient, SqlSchema } from "@effect/sql"
+import type { FoodId } from "@template/domain/Food"
+import { Food, FoodAlreadyExists, FoodNotFound, FoodWithSensitive } from "@template/domain/Food"
 import { Effect, Option, Schema } from "effect"
 import { SqlLive } from "../Sql.js"
-import { Food, FoodAlreadyExists, FoodId, FoodNotFound, FoodWithSensitive } from "@template/domain/Food"
-import { SqlClient, SqlSchema } from "@effect/sql"
+
 import { CategoriesRepo } from "../Categories/Repo.js"
-import { CategoryId } from "../../../domain/src/Category.js"
+import type { SqlLive } from "../Sql.js"
 
 export const make = Model.makeRepository(Food, {
     tableName: "food",
@@ -15,7 +16,7 @@ export const make = Model.makeRepository(Food, {
 export class FoodsRepo extends Effect.Service<FoodsRepo>()(
     "Foods/Repo",
     {
-        effect: Effect.gen(function* () {
+        effect: Effect.gen(function*() {
             const sql = yield* SqlClient.SqlClient
             const table = "foods"
             const repo = yield* Model.makeRepository(Food, {
@@ -25,16 +26,17 @@ export class FoodsRepo extends Effect.Service<FoodsRepo>()(
             })
             const categoriesRepo = yield* CategoriesRepo
 
-            const getAll = () => SqlSchema.findAll({
-                Request: Schema.Void,
-                Result: Food,
-                execute: () => sql`select * from foods`
-            })().pipe(
-                Effect.catchTags({
-                    ParseError: (error) => Effect.die(error),
-                    SqlError: (error) => Effect.die(error)
-                })
-            )
+            const getAll = () =>
+                SqlSchema.findAll({
+                    Request: Schema.Void,
+                    Result: Food,
+                    execute: () => sql`select * from foods`
+                })().pipe(
+                    Effect.catchTags({
+                        ParseError: (error) => Effect.die(error),
+                        SqlError: (error) => Effect.die(error)
+                    })
+                )
 
             const where = SqlSchema.findOne({
                 Request: Schema.Struct({
@@ -45,42 +47,54 @@ export class FoodsRepo extends Effect.Service<FoodsRepo>()(
                 execute: ({ column, value }) => sql`SELECT * FROM ${sql(table)} WHERE ${sql(column)} = ${value}`
             })
 
-            const findById = (id: FoodId) => repo.findById(id).pipe(
-                Effect.flatMap(
-                    Option.match({
-                        onNone: () => new FoodNotFound({ id }),
-                        onSome: Effect.succeed
-                    })
-                ),
-                Effect.flatMap((food) => categoriesRepo.findById(food.categoryId).pipe(
-                    Effect.map((category) => new FoodWithSensitive({
-                        ...food,
-                        category
-                    })),
-                    Effect.catchTag("CategoryNotFound", (error) => Effect.die(error))
-                ))
-            )
+            const findById = (id: FoodId) =>
+                repo.findById(id).pipe(
+                    Effect.flatMap(
+                        Option.match({
+                            onNone: () => new FoodNotFound({ id }),
+                            onSome: Effect.succeed
+                        })
+                    ),
+                    Effect.flatMap((food) =>
+                        categoriesRepo.findById(food.categoryId).pipe(
+                            Effect.map((category) =>
+                                new FoodWithSensitive({
+                                    ...food,
+                                    category
+                                })
+                            ),
+                            Effect.catchTag("CategoryNotFound", (error) => Effect.die(error))
+                        )
+                    )
+                )
 
-            const deleteById = (id: FoodId) => findById(id).pipe(
-                Effect.andThen((category) => repo.delete(category.id))
-            )
+            const deleteById = (id: FoodId) =>
+                findById(id).pipe(
+                    Effect.andThen((category) => repo.delete(category.id))
+                )
 
-            const updateFood = (id: FoodId, { name, price, description, categoryId }: Schema.Schema.Type<typeof Food.jsonUpdate> & {
-                categoryId: CategoryId
-            }) => findById(id).pipe(
+            const updateFood = (
+                id: FoodId,
+                { categoryId, description, name, price }: Schema.Schema.Type<typeof Food.jsonUpdate> & {
+                    categoryId: CategoryId
+                }
+            ) => findById(id).pipe(
                 Effect.tap(Effect.annotateCurrentSpan({
                     name: "updateFood",
                     attributes: { id, name, price, description }
                 })),
                 Effect.tap(categoriesRepo.findById(categoryId)),
-                Effect.andThen(food =>
+                Effect.andThen((food) =>
                     SqlSchema.findOne({
                         Request: Schema.Void,
                         Result: Food,
-                        execute: () => sql`SELECT * FROM ${sql(table)} where ${sql.and([
-                            sql`name = ${name}`,
-                            sql`id != ${food.id}`
-                        ])}`
+                        execute: () =>
+                            sql`SELECT * FROM ${sql(table)} where ${
+                                sql.and([
+                                    sql`name = ${name}`,
+                                    sql`id != ${food.id}`
+                                ])
+                            }`
                     })().pipe(
                         Effect.andThen(
                             Option.match({
@@ -90,9 +104,15 @@ export class FoodsRepo extends Effect.Service<FoodsRepo>()(
                         )
                     )
                 ),
-                Effect.andThen(() => repo.update(Food.update.make({
-                    id, name, price, description, categoryId
-                }))),
+                Effect.andThen(() =>
+                    repo.update(Food.update.make({
+                        id,
+                        name,
+                        price,
+                        description,
+                        categoryId
+                    }))
+                ),
                 Effect.catchTags({
                     ParseError: (error) => Effect.die(error),
                     SqlError: (error) => Effect.die(error)
